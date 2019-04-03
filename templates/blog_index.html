@@ -1,0 +1,129 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{% block title %}Blog of FTC{% endblock %}</title>
+    <script src="{% static 'load_more.js' %}"></script>
+    <script type="{% static 'bootstrap/js/jquery-3.2.1.min.js' %}"></script>
+    <script type="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+    <link rel="shortcut icon" href={% static 'media/favicon.ico' %}>
+    <style type="text/css">
+         input::-webkit-input-placeholder {
+         color: #fba24b;
+
+         font-size: 13px;
+
+
+   }
+        .main-jum{
+    height: 200px;
+    background: -webkit-linear-gradient(left, red , blue); /* Safari 5.1 - 6.0 */
+    background: -o-linear-gradient(right, red, blue); /* Opera 11.1 - 12.0 */
+    background: -moz-linear-gradient(right, red, blue); /* Firefox 3.6 - 15 */
+    background: linear-gradient(to right, red , #a65eff); /* 标准的语法（必须放在最后） */
+}
+    </style>
+</head>
+
+<body >
+<br>
+<div class="container" >
+    <div class="main-jum jumbotron text-center" style="background-color: #87CEFA;margin-bottom:0;">
+        <h1 id="left-right_Color" style="color:white">蜗牛，为梦想而生。</h1>
+
+
+    </div>
+    <!-- 中间内容 -->
+    <div class="row">
+        {% block content %}
+            <div class="col-md-1 "></div>
+            <div class="col-md-8 " >
+                <div class="page-header">
+                    <h1 style="font-family: 黑体">博客首页 <small>置顶 </small></h1>
+                </div>
+                <class class="page-body ">
+
+                    <!-- <blockquote> -->
+                    <p class="lead">博客由<code>Django</code>框架+<code>Nginx</code>服务器+<code>Bootstrap</code>搭建。<br>
+                    <blockquote class="blockquote-reverse">
+                        <a href="#">吃奶酪的蜗牛</a>
+                    </blockquote>
+                    </p>
+                    <!-- </blockquote> -->
+                    {#       文章显示   #}
+                    {% for post in posts %}
+                        <div class="page-header ">
+                            <h1 style="font-family: 黑体 ;display: inline" ><a href="{% url 'Blog:detail' post.pk %}" style="text-decoration: none;">{{ post.title }} </a></h1>
+                            <i class="glyphicon glyphicon-eye-open "  style="display:inline;margin-left: 2px;"></i>&nbsp;{{ post.views }}&nbsp;
+                            <i class="glyphicon glyphicon-tag "  style="display:inline;"></i>&nbsp;<a href="{% url 'Blog:cate' post.category.id %}">{{ post.category }}</a>&nbsp;
+                            <i class="glyphicon glyphicon-time "  style="display:inline;"></i>&nbsp;{{ post.created_time|date:"Y-m-d" }}
+                        </div>
+                        <figure class="highlight">
+                            <span class="c1"><b class="lead">{{ post.body|truncatechars:200|safe }}</b></span>
+                            <a href="{% url 'Blog:detail' post.pk  %}">查看更多</a>
+                        </figure>
+
+                        <br>
+
+                    {% endfor %}
+                <h2 id="load_more" style="text-align: center"><a href="">单击加载更多</a></h2>
+                </class>
+
+    </div>
+
+        {% endblock content %}
+
+        <br>
+
+
+        <!-- 右边 分类 -->
+{% block  category %}
+
+
+        <div class="col-md-3 ">
+        <h2 class="hidden-xs hidden-sm hidden-md">这边查找文章 </h2>
+        <br/>
+            <form class="form-inline" method="get" action="{% url 'Blog:search'  %}">
+                {% csrf_token %}
+                <input class="form-control btn-default" type="text" placeholder="Search..." name="key">
+                <button class="btn btn-default " type="type" >搜   索</button>
+            </form>
+
+        <br/><br/><br/>
+            <h2 class="hidden-xs hidden-sm hidden-md">热门文章</h2>
+            <nav class="navbar navbar-expand-md hidden-xs hidden-sm hidden-md bg-light ">
+                <ul class="nav">
+                    {% for top_3 in top_three %}
+                    <li class="nav-item">
+                        <a class="nav-link lead" href="{% url 'Blog:detail' top_3.id %}">{{ top_3.title }}</a>
+                    </li>
+                    {% endfor %}
+
+                </ul>
+            </nav>
+            <h2 class="hidden-xs hidden-sm hidden-md">文章分类</h2>
+            <nav class="navbar navbar-expand-md hidden-xs hidden-sm hidden-md bg-light ">
+                <ul class="nav">
+                    {% for cate in cate_all %}
+                    <li class="nav-item">
+                        <a class="nav-link lead" href="{% url 'Blog:cate' cate.id %}">{{  cate.name }}</a>
+                    </li>
+                    {% endfor %}
+
+                </ul>
+            </nav>
+{#            <object type="application/x-shockwave-flash" style="outline:none;" data="http://cdn.abowman.com/widgets/penguins/penguins.swf?" width="300" height="200"><param name="movie" value="http://cdn.abowman.com/widgets/penguins/penguins.swf?"></param><param name="AllowScriptAccess" value="always"></param><param name="wmode" value="opaque"></param><param name="scale" value="noscale"/><param name="salign" value="tl"/></object>#}
+        </div>
+    {% endblock category%}
+    </div>
+
+</div>
+<!--  结束 -->
+<!--   				页脚 -->
+<br><br><br><br>
+<div class="jumbotron text-center" style="margin-bottom:0;background-color: #87CEFA;">
+    <strong><p style="color: white;font-family: monospace;">本站作者联系方式: <a href="">facecheese@163.com</a></p></strong>
+</div>
+</body>
+</html>

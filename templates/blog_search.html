@@ -1,0 +1,53 @@
+{% extends 'blog_detail.html' %}
+{% block content %}
+    <div class="col-md-2"></div>
+
+
+    <div class="col-md-8">
+        {% for key in object_list %}
+            <div class="page-header">
+                <h1 style="font-family: 黑体 ;display: inline">{{ key.title }}    </h1>
+                <i class="glyphicon glyphicon-eye-open "
+                   style="display:inline;margin-left: 2px;"></i>&nbsp;{{ key.views }}&nbsp;
+                <i class="glyphicon glyphicon-tag " style="display:inline;"></i>&nbsp;<a href="">{{ key.category }}</a>&nbsp;
+                <i class="glyphicon glyphicon-time "
+                   style="display:inline;"></i>&nbsp;{{ key.created_time|date:"Y-m-d " }}
+            </div>
+            <figure class="highlight"><span class="c1">
+								<b class="lead">{{ key.body|safe  }}</b><a
+                    href="{% url 'Blog:detail' key.pk %}">查看更多</a></span>
+            </figure>
+        {% empty %}
+            <h4>Nothing</h4>
+        {% endfor %}
+     <div class="col-md-4">
+    </div>
+{#    <ul class="pagination">#}
+{#        {% if page_obj.has_previous %}#}
+{#            <li class="page-item"><a class="page-link" href="#">Previous</a></li>#}
+{#        {% else %}#}
+{#            <li class="disabled"><a>&laquo;</a></li>#}
+{#        {% endif %}#}
+{#        {% for page_number in paginator.page_range %}#}
+{#            {% if page_number != page_obj.number %}#}
+{#                <li><a href="/?page{{ page_number }}">{{ page_number }}</a></li>#}
+{##}
+{#            {% else %}#}
+{#                <li class="active"><a>{{ page_number }}</a></li>#}
+{#            {% endif %}#}
+{#        {% endfor %}#}
+{#        {% if page_obj.has_next %}#}
+{#            <li><a href="/?page={{ page_obj.next_page_number }}">&raquo;</a></li>#}
+{#        {% else %}#}
+{#            <li class="disabled"><a>&raquo;</a></li>#}
+{#        {% endif %}#}
+{##}
+{#    </ul>#}
+    </div>
+    <div class="col-md-4">
+    </div>
+
+    <div class="col-md-2">
+    </div>
+{% endblock content %}
+
